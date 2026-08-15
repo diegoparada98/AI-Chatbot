@@ -1,0 +1,101 @@
+:root {
+  --bg: #0f1220;
+  --panel: #1a1f36;
+  --panel-2: #232a4d;
+  --accent: #ff6b2c; /* Itaú-ish orange */
+  --accent-2: #4f8cff;
+  --text: #e8ecff;
+  --muted: #9aa3c7;
+  --free: #1f7a4d;
+  --occupied: #7a2f3a;
+  --border: #2c3358;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 18px;
+}
+
+.subtitle { color: var(--muted); font-size: 0.85rem; margin: 4px 0; }
+.error {
+  background: #3a1f28; color: #ffb3c0; border: 1px solid #7a2f3a;
+  padding: 8px 10px; border-radius: 8px; font-size: 0.85rem; margin: 8px 0;
+}
+
+button {
+  background: var(--accent); color: #1a0f08; border: none; font-weight: 600;
+  padding: 10px 14px; border-radius: 8px; cursor: pointer;
+}
+button:disabled { opacity: 0.5; cursor: default; }
+button.link { background: none; color: var(--accent-2); padding: 4px; font-weight: 500; }
+
+input, select {
+  background: var(--panel-2); color: var(--text);
+  border: 1px solid var(--border); border-radius: 8px; padding: 10px;
+  font-size: 0.95rem;
+}
+
+/* --- Login --- */
+.login-wrap {
+  min-height: 100vh; display: grid; place-items: center; padding: 20px;
+}
+.login-card { width: 320px; display: flex; flex-direction: column; gap: 8px; }
+.login-card h1 { margin: 0; color: var(--accent); }
+.login-card label { font-size: 0.8rem; color: var(--muted); margin-top: 6px; }
+.login-card button { margin-top: 14px; }
+
+/* --- App shell --- */
+.topbar {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 14px 22px; background: var(--panel); border-bottom: 1px solid var(--border);
+}
+.brand { font-weight: 700; color: var(--accent); }
+.session { display: flex; align-items: center; gap: 14px; color: var(--muted); font-size: 0.9rem; }
+
+.layout {
+  display: grid; grid-template-columns: 1fr 380px; gap: 18px;
+  padding: 18px; max-width: 1200px; margin: 0 auto; align-items: start;
+}
+@media (max-width: 860px) {
+  .layout { grid-template-columns: 1fr; }
+}
+
+/* --- Chat --- */
+.chat { display: flex; flex-direction: column; height: 72vh; }
+.messages { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; padding-right: 4px; }
+.bubble {
+  max-width: 82%; padding: 10px 14px; border-radius: 14px; line-height: 1.4;
+  white-space: pre-wrap; font-size: 0.92rem;
+}
+.bubble.user { align-self: flex-end; background: var(--accent-2); color: #061024; border-bottom-right-radius: 4px; }
+.bubble.assistant { align-self: flex-start; background: var(--panel-2); border-bottom-left-radius: 4px; }
+.bubble.typing { opacity: 0.6; letter-spacing: 3px; }
+.composer { display: flex; gap: 8px; margin-top: 12px; }
+.composer input { flex: 1; }
+
+/* --- Schedule --- */
+.schedule { max-height: 72vh; overflow-y: auto; }
+.schedule h2 { margin: 0 0 8px; }
+.controls-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.controls-row select, .controls-row input { flex: 1; min-width: 90px; }
+.slots { display: flex; flex-direction: column; gap: 4px; margin-top: 12px; }
+.slot {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 8px 12px; border-radius: 8px; font-size: 0.85rem;
+  border-left: 4px solid transparent;
+}
+.slot.free { background: rgba(31,122,77,0.15); border-left-color: var(--free); }
+.slot.occupied { background: rgba(122,47,58,0.2); border-left-color: var(--occupied); }
+.slot-time { color: var(--muted); font-variant-numeric: tabular-nums; }
+.slot-label { font-weight: 500; }
