@@ -16,13 +16,13 @@ class Settings(BaseSettings):
     openai_model: str = "gpt-4.1-mini"
 
     # --- Auth ---
-    # JWT signing secret. Override in production via env var.
-    jwt_secret: str = "change-me-in-production"
+    # No defaults: if these are absent from .env / environment the app fails at startup,
+    # which is the correct behaviour — secrets must be explicitly provided.
+    jwt_secret: str
+    app_password: str
+
     jwt_algorithm: str = "HS256"
     access_token_expire_minutes: int = 480  # 8h working day
-
-    # Shared password for the two challenge users.
-    app_password: str = "TechnicalChallengePromtior"
 
     # --- Persistence ---
     database_url: str = "sqlite:///./booking.db"

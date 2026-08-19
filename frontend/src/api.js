@@ -23,14 +23,24 @@ async function request(path, options = {}) {
   const token = getToken();
   if (token) headers["Authorization"] = `Bearer ${token}`;
 
-  const res = await fetch(path, { ...options, headers });
-  if (res.status === 204) return null;
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 60_000);
 
-  const data = await res.json().catch(() => ({}));
-  if (!res.ok) {
-    throw new Error(data.detail || `Request failed (${res.status})`);
+  try {
+    const res = await fetch(path, { ...options, headers, signal: controller.signal });
+    if (res.status === 204) return null;
+
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      throw new Error(data.detail || `Request failed (${res.status})`);
+    }
+    return data;
+  } catch (err) {
+    if (err.name === "AbortError") throw new Error("Request timed out (60 s). Check the backend.");
+    throw err;
+  } finally {
+    clearTimeout(timeout);
   }
-  return data;
 }
 
 export function login(username, password) {

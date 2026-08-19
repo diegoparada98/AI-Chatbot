@@ -8,6 +8,7 @@ from __future__ import annotations
 
 from datetime import datetime
 
+import httpx
 from langchain_core.messages import (
     AIMessage,
     BaseMessage,
@@ -17,11 +18,15 @@ from langchain_core.messages import (
 )
 from langchain_openai import ChatOpenAI
 
+from app.agent.tools import build_tools
 from app.core.config import settings
 from app.domain.booking_rules import BookingError
 from app.domain.rooms import ROOMS
 from app.services.booking_service import BookingService
-from app.agent.tools import build_tools
+
+# httpx client that uses certifi instead of truststore (avoids a RecursionError
+# when truststore._windows conflicts with Avast TLS interception on Windows).
+_http_client = httpx.Client(verify=True)
 
 MAX_TOOL_ITERATIONS = 6
 
@@ -76,6 +81,7 @@ def run_chat(
         model=settings.openai_model,
         api_key=settings.openai_api_key,
         temperature=0,
+        http_client=_http_client,
     ).bind_tools(tools)
 
     messages: list[BaseMessage] = [SystemMessage(content=_system_prompt(username))]
